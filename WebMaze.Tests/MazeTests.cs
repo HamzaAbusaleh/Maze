@@ -40,8 +40,22 @@ namespace WebMaze.Tests
             var result = maze.Generate();
 
             // Assert
-            Assert.Equal(maze.GetStartPoint().RowIndex,0);
-            Assert.NotEqual(maze.GetStartPoint().ColIndex,0);
+            Assert.Equal(maze.GetStartPoint().RowIndex, 0);
+            Assert.InRange(maze.GetStartPoint().ColIndex, 0, 9);
+        }
+
+        [Fact]
+        public void Generate_CheckEndPointExist()
+        {
+            // Arrange
+            var maze = new Maze(10, 10);
+
+            // Act
+            var result = maze.Generate();
+
+           // Assert
+             Assert.Equal(maze.GetEndPoint().RowIndex, 9);
+            Assert.InRange(maze.GetEndPoint().ColIndex, 0, 9);
         }
     }
 }
