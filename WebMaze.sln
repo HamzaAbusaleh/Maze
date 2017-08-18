@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMaze", "WebMaze\WebMaze.csproj", "{5E2DA94B-A0B2-4F3B-AAE1-0595D78E1652}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMaze.Tests", "WebMaze.Tests\WebMaze.Tests.csproj", "{3290A883-E088-4B74-AE19-B0638AD6FC38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5E2DA94B-A0B2-4F3B-AAE1-0595D78E1652}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E2DA94B-A0B2-4F3B-AAE1-0595D78E1652}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E2DA94B-A0B2-4F3B-AAE1-0595D78E1652}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3290A883-E088-4B74-AE19-B0638AD6FC38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3290A883-E088-4B74-AE19-B0638AD6FC38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3290A883-E088-4B74-AE19-B0638AD6FC38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3290A883-E088-4B74-AE19-B0638AD6FC38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
