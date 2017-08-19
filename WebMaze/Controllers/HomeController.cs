@@ -15,14 +15,14 @@ namespace WebMaze.Controllers
         {
             var maze = new Maze(width, height);
             var result = maze.Generate();
-            if (!result)
+            if (!result.IsSuccessfull)
             {
-
-                return Json(new { Message = "Failed to generate the maze" });
+                return Json(new { Message = "Failed to generate the maze solution" });
             }
             var mazeArray = maze.MapMazeToArray();
+
             var solveResult = maze.Solve();
-            if (!solveResult)
+            if (!solveResult.IsSuccessfull)
             {
                 return Json(new { Message = "Failed to generate the maze solution" });
             }

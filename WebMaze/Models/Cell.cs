@@ -12,19 +12,19 @@ namespace WebMaze.Models
         /// </summary>
         public unsafe Cell(int row, int col)
         {
-            this.RowIndex = row;
-            this.ColIndex = col;
+            RowIndex = row;
+            ColIndex = col;
             // initially, all walls are intact
-            this.LeftWall = true;
-            this.RightWall = true;
-            this.UpWall = true;
-            this.DownWall = true;
-            this.Path = Paths.None;
+            LeftWall = true;
+            RightWall = true;
+            UpWall = true;
+            DownWall = true;
+            Path = Paths.None;
 
             // must be initialized, since it is a member of a struct
-            this.Visited = false;
-            this.Previous = null;
-            this.IsSolution = false;
+            Visited = false;
+            Previous = null;
+            IsSolution = false;
         }
 
         /// <summary>
@@ -52,6 +52,15 @@ namespace WebMaze.Models
         /// </summary>
         public bool Visited;
 
+        /// <summary>
+        /// Col Index
+        /// </summary>
+        public int ColIndex;
+
+        /// <summary>
+        /// Row Index
+        /// </summary>
+        public int RowIndex;
 
         public enum Paths
         {
@@ -78,15 +87,15 @@ namespace WebMaze.Models
                 switch (index)
                 {
                     case 0:
-                        return this.LeftWall;
+                        return LeftWall;
                     case 1:
-                        return this.RightWall;
+                        return RightWall;
                     case 2:
-                        return this.UpWall;
+                        return UpWall;
                     case 3:
-                        return this.DownWall;
+                        return DownWall;
                     case 4:
-                        return this.Visited;
+                        return Visited;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -96,19 +105,19 @@ namespace WebMaze.Models
                 switch (index)
                 {
                     case 0:
-                        this.LeftWall = value;
+                        LeftWall = value;
                         break;
                     case 1:
-                        this.RightWall = value;
+                        RightWall = value;
                         break;
                     case 2:
-                        this.UpWall = value;
+                        UpWall = value;
                         break;
                     case 3:
-                        this.DownWall = value;
+                        DownWall = value;
                         break;
                     case 4:
-                        this.Visited = value;
+                        Visited = value;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -127,15 +136,13 @@ namespace WebMaze.Models
                     x[r, k] = " ";
 
                 }
-
             }
 
             x[1, 1] = "  ";
-
-            if (this.UpWall) x[0, 1] = "---";
-            if (this.LeftWall) x[1, 0] = "|";
-            if (this.RightWall) x[1, 2] = "|";
-            if (this.DownWall) x[2, 1] = "---";
+            if (UpWall) x[0, 1] = "---";
+            if (LeftWall) x[1, 0] = "|";
+            if (RightWall) x[1, 2] = "|";
+            if (DownWall) x[2, 1] = "---";
 
             return x;
 
@@ -149,12 +156,9 @@ namespace WebMaze.Models
             {
                 this[i] = true;
             }
-            this.Visited = false;
+            Visited = false;
         }
 
-        public int ColIndex;
-
-        public int RowIndex;
 
     }
 }

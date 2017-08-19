@@ -24,7 +24,7 @@ namespace WebMaze.Tests
             var maze = new Maze(10, 10);
 
             // Act
-            var result = maze.Generate();
+            maze.Generate();
 
             // Assert
             Assert.False(maze.IsRunning);
@@ -37,7 +37,7 @@ namespace WebMaze.Tests
             var maze = new Maze(10, 10);
 
             // Act
-            var result = maze.Generate();
+            maze.Generate();
 
             // Assert
             Assert.Equal(maze.GetStartPoint().RowIndex, 0);
@@ -51,10 +51,10 @@ namespace WebMaze.Tests
             var maze = new Maze(10, 10);
 
             // Act
-            var result = maze.Generate();
+            maze.Generate();
 
-           // Assert
-             Assert.Equal(maze.GetEndPoint().RowIndex, 9);
+            // Assert
+            Assert.Equal(maze.GetEndPoint().RowIndex, 9);
             Assert.InRange(maze.GetEndPoint().ColIndex, 0, 9);
         }
     }
