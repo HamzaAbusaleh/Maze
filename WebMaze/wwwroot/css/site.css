@@ -27,15 +27,20 @@ textarea {
 .carousel-inner .item img[src$=".svg"] {
     width: 100%;
 }
-
-/* Maze Css*/
-.td-height-10 {
-    line-height: 10px;
-}
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
         display: none;
     }
+}
+
+/* Maze Css*/
+.td-height-10 {
+    line-height: 10px;
+}
+.center-maze {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

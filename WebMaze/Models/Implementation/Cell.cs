@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebMaze.Models
+namespace WebMaze.Models.Implementation
 {
     /// <summary>
     /// Represents a maze cell

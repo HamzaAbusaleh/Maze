@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebMaze.Models;
+using WebMaze.Models.Interface;
 
-namespace WebMaze.Models
+namespace WebMaze.Models.Implementation
 {
     /// <summary>
     /// The maze class
     /// Generate, Solve maze
     /// </summary>
-    public class Maze
+    public class Maze : IMaze
     {
 
         // Properties 
@@ -117,8 +117,6 @@ namespace WebMaze.Models
         /// <summary>
         /// Generate the maze array
         /// </summary>
-        /// <param name="width">Number of squares in width</param>
-        /// <param name="height">Number of squares in height</param>
         public Result Generate()
         {
             IsRunning = true;
@@ -154,9 +152,7 @@ namespace WebMaze.Models
         /// Generate a maze with the Depth-First Search approach
         /// </summary>
         /// <param name="mazeArray">the array of cells</param>
-        /// <param name="width">A width for the maze</param>
-        /// <param name="height">A height for the maze</param>
-        private Result DepthFirstSearchMazeGeneration(Cell[,] mazeArray)
+        public Result DepthFirstSearchMazeGeneration(Cell[,] mazeArray)
         {
             Stack<Cell> stack = new Stack<Cell>();
             Random neighbourRandom = new Random();
@@ -166,7 +162,7 @@ namespace WebMaze.Models
 
             while (stack.Count > 0)
             {
-                List<Tuple<int, int>> neighbours = FetchNeighborCells(mazeArray, location, _width, _height);
+                List<Tuple<int, int>> neighbours = FetchNeighborCells(mazeArray, location);
                 if (neighbours.Count > 0)
                 {
                     var neighbourIndex = neighbourRandom.Next(neighbours.Count);
@@ -317,7 +313,7 @@ namespace WebMaze.Models
         /// <param name="width">The width of the maze</param>
         /// <param name="height">The height of the maze</param>
         /// <returns></returns>
-        private List<Tuple<int, int>> FetchNeighborCells(Cell[,] mazeArray, Cell cell, int width, int height)
+        private List<Tuple<int, int>> FetchNeighborCells(Cell[,] mazeArray, Cell cell)
         {
             int tempRow = cell.RowIndex;
             int tempCol = cell.ColIndex;
@@ -331,7 +327,7 @@ namespace WebMaze.Models
             }
             // Right
             tempCol = cell.ColIndex + 1;
-            if (tempCol < width && CheckAllWallsIntact(mazeArray, mazeArray[tempRow, tempCol]))
+            if (tempCol < _width && CheckAllWallsIntact(mazeArray, mazeArray[tempRow, tempCol]))
             {
                 availablePlaces.Add(new Tuple<int, int>(tempRow, tempCol));
             }
@@ -345,7 +341,7 @@ namespace WebMaze.Models
             }
             // Down
             tempRow = cell.RowIndex + 1;
-            if (tempRow < height && CheckAllWallsIntact(mazeArray, mazeArray[tempRow, tempCol]))
+            if (tempRow < _height && CheckAllWallsIntact(mazeArray, mazeArray[tempRow, tempCol]))
             {
                 availablePlaces.Add(new Tuple<int, int>(tempRow, tempCol));
             }
@@ -380,14 +376,15 @@ namespace WebMaze.Models
             UnVisitAllCells(maze);
 
             var result = SolveWithIterativeDepthFirst(_startPoint, _endPoint);
-            if (!result)
+
+            if (!result.IsSuccessfull)
             {
-                return new Result(){ErrorMessage = "Error occured : Maze could not be solved"};
+                return result;
             }
 
             IsSolving = false;
 
-            return new Result(){IsSuccessfull = true};
+            return result;
 
         }
 
@@ -398,7 +395,7 @@ namespace WebMaze.Models
         /// <param name="end">Maze end cell</param>
         /// <returns>return true when the solution is found</returns>
         /// unsafe shows that the current method is using pointers
-        private unsafe bool SolveWithIterativeDepthFirst(Cell start, Cell end)
+        public virtual unsafe Result SolveWithIterativeDepthFirst(Cell start, Cell end)
         {
             Stack<Cell> stack = new Stack<Cell>();
 
@@ -417,8 +414,7 @@ namespace WebMaze.Models
                 // then set the neighbour cell previous pointer to the temp cell
                 // and push neighbour cell into stack
                 // else if no neighbour exists in the maze then complete
-
-
+                
                 // Left
                 if (temp.RowIndex - 1 >= 0
                     && !maze[temp.ColIndex, temp.RowIndex - 1].RightWall
@@ -487,12 +483,12 @@ namespace WebMaze.Models
 
                     maze[temp.ColIndex, temp.RowIndex].Visited = true;
                     maze[temp.ColIndex, temp.RowIndex].IsSolution = true;
-                    return true;
+                    return new Result(){IsSuccessfull = true};
                 }
 
             }
             // no solution found
-            return false;
+            return new Result(){ErrorMessage = "Error occured : No solution found"};
         }
 
 

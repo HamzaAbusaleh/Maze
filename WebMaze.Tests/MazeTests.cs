@@ -1,6 +1,9 @@
 using System;
+using Moq;
 using Xunit;
 using WebMaze.Models;
+using WebMaze.Models.Implementation;
+using WebMaze.Models.Interface;
 
 namespace WebMaze.Tests
 {
@@ -57,5 +60,6 @@ namespace WebMaze.Tests
             Assert.Equal(maze.GetEndPoint().RowIndex, 9);
             Assert.InRange(maze.GetEndPoint().ColIndex, 0, 9);
         }
+        
     }
 }

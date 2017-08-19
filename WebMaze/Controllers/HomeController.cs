@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebMaze.Models;
+using WebMaze.Models.Implementation;
 
 namespace WebMaze.Controllers
 {
