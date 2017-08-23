@@ -8,33 +8,39 @@ $("#btnSolution").click(function () {
 });
 
 $("#btnGenerate").click(function () {
+
+    $("#textResult").text(""); // clear message result if there is any
+
     $.ajax({
         type: 'GET',
         dataType: 'json',
         url: '/Home/GenerateMaze',
         data: { width: $("#width").val(), height: $("#height").val() },
         success: function (response) {
-            
-            console.log(response);
+
+            if (response["errorMessage"]) {
+                $("#textResult").text(response["errorMessage"]);
+                return;
+            }
+
             var maze = response["maze"];
             localStorage["mazesolution"] = JSON.stringify(response["solution"]);
             localStorage["maze"] = maze;
 
             printMaze(maze);
-
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error - ' + errorThrown);
+            $("#textResult").text('Error - ' + errorThrown);
         }
     });
 
 });
 
-// Print the maze that is passed
+
+/// <summary>Print the maze that is passed</summary>
+/// <param name="maze" type=""></param>
 printMaze = function (maze) {
-    /// <summary></summary>
-    /// <param name="maze" type=""></param>
+
     var tbody = $('#maze tbody');
     tbody.empty();
 

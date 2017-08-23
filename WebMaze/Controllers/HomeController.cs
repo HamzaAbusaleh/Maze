@@ -14,22 +14,34 @@ namespace WebMaze.Controllers
         [HttpGet]
         public ActionResult GenerateMaze(int width, int height)
         {
+            if (width <= 0 || height <= 0)
+            {
+                return Json(new { ErrorMessage = "Failed to generate the maze" });
+            }
+
             var maze = new Maze(width, height);
             var result = maze.Generate();
             if (!result.IsSuccessfull)
             {
-                return Json(new { Message = "Failed to generate the maze solution" });
+                return Json(new { ErrorMessage = "Failed to generate the maze" });
             }
             var mazeArray = maze.MapMazeToArray();
 
             var solveResult = maze.Solve();
             if (!solveResult.IsSuccessfull)
             {
-                return Json(new { Message = "Failed to generate the maze solution" });
+                return Json(new { ErrorMessage = "Failed to generate the maze solution" });
             }
 
             var mazeArraySolve = maze.MapMazeToArray(true);
-            return Json(new { Maze = mazeArray, Solution = mazeArraySolve });
+
+            return Json(new
+            {
+                Maze = mazeArray,
+                Solution = mazeArraySolve,
+                startPoint = maze.GetStartPoint(),
+                endPoint = maze.GetEndPoint()
+            });
         }
 
 
