@@ -1,28 +1,33 @@
-﻿$.ajax({
-    type: 'GET',
-    dataType: 'json',
-    url: '/Home/GenerateMaze',
-    data: { width: 20, height: 20 },
-    success: function (response) {
-        //alert('success');
-        console.log(response);
-        var maze = response["maze"];
-        localStorage["mazesolution"] = JSON.stringify(response["solution"]);
-        localStorage["maze"] = maze;
-
-        printMaze(maze);
-
-
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-        alert('Error - ' + errorThrown);
-    }
-});
+﻿
 
 // print maze solotion when Get Solution button is clicked
 $("#btnSolution").click(function () {
     var mazeSolution = JSON.parse(localStorage["mazesolution"]);
     printMaze(mazeSolution);
+
+});
+
+$("#btnGenerate").click(function () {
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/Home/GenerateMaze',
+        data: { width: $("#width").val(), height: $("#height").val() },
+        success: function (response) {
+            
+            console.log(response);
+            var maze = response["maze"];
+            localStorage["mazesolution"] = JSON.stringify(response["solution"]);
+            localStorage["maze"] = maze;
+
+            printMaze(maze);
+
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error - ' + errorThrown);
+        }
+    });
 
 });
 
