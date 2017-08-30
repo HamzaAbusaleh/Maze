@@ -26,7 +26,7 @@ namespace WebMaze.Models.Implementation
         /// <summary>
         /// The two dimension array the represent the maze
         /// </summary>
-        private Cell[,] maze;
+        private readonly Cell[,] _maze;
 
         /// <summary>
         /// The maze start point
@@ -104,12 +104,11 @@ namespace WebMaze.Models.Implementation
         /// </summary>
         /// <param name="totalWidth">The maximum width of the maze</param>
         /// <param name="totalHeight">The maximum height of the maze</param>
-        /// <param name="random"></param>
         public Maze(int totalWidth, int totalHeight)
         {
-            maze = new Cell[totalHeight, totalWidth];
+            _maze = new Cell[totalHeight, totalWidth];
             Random = new Random();
-            Initailze(maze, totalWidth, totalHeight);
+            Initailze(_maze, totalWidth, totalHeight);
         }
 
 
@@ -121,10 +120,10 @@ namespace WebMaze.Models.Implementation
         {
             IsRunning = true;
 
-            var result = DepthFirstSearchMazeGeneration(maze);
+            var result = DepthFirstSearchMazeGeneration(_maze);
 
             IsRunning = false;
-            
+
             return result;
         }
 
@@ -157,7 +156,7 @@ namespace WebMaze.Models.Implementation
             Stack<Cell> stack = new Stack<Cell>();
             Random neighbourRandom = new Random();
 
-            Cell location = mazeArray[ Random.Next(_height),Random.Next(_width)];
+            Cell location = mazeArray[Random.Next(_height), Random.Next(_width)];
             stack.Push(location);
 
             while (stack.Count > 0)
@@ -181,21 +180,21 @@ namespace WebMaze.Models.Implementation
 
             }
 
-            MakeMazeBeginEnd(maze);
+            MakeMazeBeginEnd(_maze);
 
             if (this._startPoint.LeftWall || this._endPoint.RightWall)
             {
-                return new Result() {ErrorMessage = "Error occured : maze start or end point has not been created"};
+                return new Result() { ErrorMessage = "Error occured : maze start or end point has not been created" };
 
             }
 
-            return new Result(){IsSuccessfull = true};
+            return new Result() { IsSuccessfull = true };
 
         }
 
         public string[,] MapMazeToArray(bool withSolution = false)
         {
-            var mazeArray = new string[ _height * 2 + 1, _width * 2 + 1];
+            var mazeArray = new string[_height * 2 + 1, _width * 2 + 1];
 
             int row = 0;
             int col = 0;
@@ -203,22 +202,22 @@ namespace WebMaze.Models.Implementation
             {
                 for (int b = 0; b < _height; b++)
                 {
-                    var x = maze[b, i].DisplayCell();
+                    var x = _maze[b, i].DisplayCell();
 
                     for (int r = 0; r < 3; r++)
                     {
                         for (int k = 0; k < 3; k++)
                         {
-                            mazeArray[row+ k, col + r] = x[k,r];
+                            mazeArray[row + k, col + r] = x[k, r];
                         }
                     }
 
                     if (withSolution)
                     {
                         var solutionPathResult =
-                            _pathSolution.FirstOrDefault(currentMaze => currentMaze.ColIndex == maze[b,i].ColIndex &&
-                                                                             currentMaze.RowIndex == maze[b, i].RowIndex);
-                        if (solutionPathResult.IsSolution)
+                            _pathSolution.FirstOrDefault(currentMaze => currentMaze.ColIndex == _maze[b, i].ColIndex &&
+                                                                             currentMaze.RowIndex == _maze[b, i].RowIndex);
+                        if (solutionPathResult != null && solutionPathResult.IsSolution)
                         {
                             mazeArray[row + 1, col + 1] = solutionPathResult.IsSolution ? "X" : "";
                         }
@@ -354,9 +353,9 @@ namespace WebMaze.Models.Implementation
         /// <param name="mazeArray">The maze array to reset elements</param>
         private void UnVisitAllCells(Cell[,] mazeArray)
         {
-            for (int i = 0; i < maze.GetLength(0); i++)
+            for (int i = 0; i < _maze.GetLength(0); i++)
             {
-                for (int j = 0; j < maze.GetLength(1); j++)
+                for (int j = 0; j < _maze.GetLength(1); j++)
                 {
                     mazeArray[i, j].Visited = false;
                     mazeArray[i, j].Path = Cell.Paths.None;
@@ -373,7 +372,7 @@ namespace WebMaze.Models.Implementation
             // initialize
             IsSolving = true;
             _pathSolution.Clear();
-            UnVisitAllCells(maze);
+            UnVisitAllCells(_maze);
 
             var result = SolveWithIterativeDepthFirst(_startPoint, _endPoint);
 
@@ -395,7 +394,7 @@ namespace WebMaze.Models.Implementation
         /// <param name="end">Maze end cell</param>
         /// <returns>return true when the solution is found</returns>
         /// unsafe shows that the current method is using pointers
-        public virtual unsafe Result SolveWithIterativeDepthFirst(Cell start, Cell end)
+        public virtual Result SolveWithIterativeDepthFirst(Cell start, Cell end)
         {
             Stack<Cell> stack = new Stack<Cell>();
 
@@ -406,7 +405,7 @@ namespace WebMaze.Models.Implementation
                 Cell temp = stack.Pop();
 
                 // mark as visited to prevent infinite loops
-                maze[temp.RowIndex, temp.ColIndex].Visited = true;
+                _maze[temp.RowIndex, temp.ColIndex].Visited = true;
 
                 // Check every neighbor cell
                 // If neighbour exists in the maze
@@ -414,55 +413,52 @@ namespace WebMaze.Models.Implementation
                 // then set the neighbour cell previous pointer to the temp cell
                 // and push neighbour cell into stack
                 // else if no neighbour exists in the maze then complete
-                
+
                 // Left
                 if (temp.ColIndex - 1 >= 0
-                    && !maze[temp.RowIndex, temp.ColIndex - 1].RightWall
-                    && !maze[temp.RowIndex, temp.ColIndex - 1].Visited)
+                    && !_maze[temp.RowIndex, temp.ColIndex - 1].RightWall
+                    && !_maze[temp.RowIndex, temp.ColIndex - 1].Visited)
                 {
                     // fixed is used to show that the current memory location won't change
-                    fixed (Cell* cell = &maze[temp.RowIndex, temp.ColIndex])
-                        maze[temp.RowIndex, temp.ColIndex - 1].Previous = cell;
-                    maze[temp.RowIndex, temp.ColIndex - 1].Path = Cell.Paths.Left;
-                    maze[temp.RowIndex, temp.ColIndex - 1].IsSolution = true;
-                    stack.Push(maze[temp.RowIndex, temp.ColIndex - 1]);
+                    _maze[temp.RowIndex, temp.ColIndex - 1].Previous = _maze[temp.RowIndex, temp.ColIndex];
+
+                    _maze[temp.RowIndex, temp.ColIndex - 1].Path = Cell.Paths.Left;
+                    _maze[temp.RowIndex, temp.ColIndex - 1].IsSolution = true;
+                    stack.Push(_maze[temp.RowIndex, temp.ColIndex - 1]);
                 }
 
                 // Right
                 if (temp.ColIndex + 1 < _width
-                    && !maze[temp.RowIndex, temp.ColIndex + 1].LeftWall
-                    && !maze[temp.RowIndex, temp.ColIndex + 1].Visited)
+                    && !_maze[temp.RowIndex, temp.ColIndex + 1].LeftWall
+                    && !_maze[temp.RowIndex, temp.ColIndex + 1].Visited)
                 {
-                    fixed (Cell* cell = &maze[temp.RowIndex, temp.ColIndex])
-                        maze[temp.RowIndex, temp.ColIndex + 1].Previous = cell;
-                    maze[temp.RowIndex, temp.ColIndex + 1].Path = Cell.Paths.Right;
-                    maze[temp.RowIndex, temp.ColIndex + 1].IsSolution = true;
+                    _maze[temp.RowIndex, temp.ColIndex + 1].Previous = _maze[temp.RowIndex, temp.ColIndex];
+                    _maze[temp.RowIndex, temp.ColIndex + 1].Path = Cell.Paths.Right;
+                    _maze[temp.RowIndex, temp.ColIndex + 1].IsSolution = true;
 
-                    stack.Push(maze[temp.RowIndex, temp.ColIndex + 1]);
+                    stack.Push(_maze[temp.RowIndex, temp.ColIndex + 1]);
                 }
 
                 // Up
                 if (temp.RowIndex - 1 >= 0
-                    && !maze[temp.RowIndex - 1, temp.ColIndex].DownWall
-                    && !maze[temp.RowIndex - 1, temp.ColIndex].Visited)
+                    && !_maze[temp.RowIndex - 1, temp.ColIndex].DownWall
+                    && !_maze[temp.RowIndex - 1, temp.ColIndex].Visited)
                 {
-                    fixed (Cell* cell = &maze[temp.RowIndex, temp.ColIndex])
-                        maze[temp.RowIndex - 1, temp.ColIndex].Previous = cell;
-                    maze[temp.RowIndex - 1, temp.ColIndex].Path = Cell.Paths.Up;
-                    maze[temp.RowIndex - 1, temp.ColIndex].IsSolution = true;
-                    stack.Push(maze[temp.RowIndex - 1, temp.ColIndex]);
+                    _maze[temp.RowIndex - 1, temp.ColIndex].Previous = _maze[temp.RowIndex, temp.ColIndex];
+                    _maze[temp.RowIndex - 1, temp.ColIndex].Path = Cell.Paths.Up;
+                    _maze[temp.RowIndex - 1, temp.ColIndex].IsSolution = true;
+                    stack.Push(_maze[temp.RowIndex - 1, temp.ColIndex]);
                 }
 
                 // Down
                 if (temp.RowIndex + 1 < _height
-                    && !maze[temp.RowIndex + 1, temp.ColIndex].UpWall
-                    && !maze[temp.RowIndex + 1, temp.ColIndex].Visited)
+                    && !_maze[temp.RowIndex + 1, temp.ColIndex].UpWall
+                    && !_maze[temp.RowIndex + 1, temp.ColIndex].Visited)
                 {
-                    fixed (Cell* cell = &maze[temp.RowIndex, temp.ColIndex])
-                        maze[temp.RowIndex + 1, temp.ColIndex].Previous = cell;
-                    maze[temp.RowIndex + 1, temp.ColIndex].Path = Cell.Paths.Down;
-                    maze[temp.RowIndex + 1, temp.ColIndex].IsSolution = true;
-                    stack.Push(maze[temp.RowIndex + 1, temp.ColIndex]);
+                    _maze[temp.RowIndex + 1, temp.ColIndex].Previous = _maze[temp.RowIndex, temp.ColIndex];
+                    _maze[temp.RowIndex + 1, temp.ColIndex].Path = Cell.Paths.Down;
+                    _maze[temp.RowIndex + 1, temp.ColIndex].IsSolution = true;
+                    stack.Push(_maze[temp.RowIndex + 1, temp.ColIndex]);
                 }
 
                 // Adding the end and start point as part of the solution
@@ -475,24 +471,21 @@ namespace WebMaze.Models.Implementation
                     while (temp.Previous != null)
                     {
                         _pathSolution.Add(temp);
-                        temp = *temp.Previous;
+                        temp = temp.Previous;
                     }
                     // add begin point to foundPath
                     temp.IsSolution = true;
                     _pathSolution.Add(temp);
 
-                    maze[temp.ColIndex, temp.RowIndex].Visited = true;
-                    maze[temp.ColIndex, temp.RowIndex].IsSolution = true;
-                    return new Result(){IsSuccessfull = true};
+                    _maze[temp.ColIndex, temp.RowIndex].Visited = true;
+                    _maze[temp.ColIndex, temp.RowIndex].IsSolution = true;
+                    return new Result() { IsSuccessfull = true };
                 }
 
             }
             // no solution found
-            return new Result(){ErrorMessage = "Error occured : No solution found"};
+            return new Result() { ErrorMessage = "Error occured : No solution found" };
         }
-
-
-
 
     }
 }

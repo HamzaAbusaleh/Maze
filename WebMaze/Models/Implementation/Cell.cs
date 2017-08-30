@@ -5,12 +5,12 @@ namespace WebMaze.Models.Implementation
     /// <summary>
     /// Represents a maze cell
     /// </summary>
-    public struct Cell
+    public class Cell
     {
         /// <summary>
         /// Initializes a new instance of maze cell with locations
         /// </summary>
-        public unsafe Cell(int row, int col)
+        public Cell(int row, int col)
         {
             RowIndex = row;
             ColIndex = col;
@@ -72,7 +72,7 @@ namespace WebMaze.Models.Implementation
         /// <summary>
         /// Gets or sets a pointer to the previous Cell in the found path chain
         /// </summary>
-        public unsafe Cell* Previous;
+        public Cell Previous;
 
         public bool IsSolution { get; set; }
         /// <summary>

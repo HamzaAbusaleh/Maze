@@ -43,8 +43,8 @@ namespace WebMaze.Tests
             maze.Generate();
 
             // Assert
-            Assert.Equal(maze.GetStartPoint().RowIndex, 0);
-            Assert.InRange(maze.GetStartPoint().ColIndex, 0, 9);
+            Assert.Equal(maze.GetStartPoint().ColIndex, 0);
+            Assert.InRange(maze.GetStartPoint().RowIndex, 0, 9);
         }
 
         [Fact]
@@ -57,8 +57,8 @@ namespace WebMaze.Tests
             maze.Generate();
 
             // Assert
-            Assert.Equal(maze.GetEndPoint().RowIndex, 9);
-            Assert.InRange(maze.GetEndPoint().ColIndex, 0, 9);
+            Assert.Equal(maze.GetEndPoint().ColIndex, 9);
+            Assert.InRange(maze.GetEndPoint().RowIndex, 0, 9);
         }
         
     }
