@@ -11,15 +11,9 @@ namespace WebMaze.Models.Interface
         /// <summary>
         /// Generate the maze array
         /// </summary>
-        Result Generate();
+        Result<Maze> Generate(int width,int height);
 
-        Result Solve();
-
-        /// <summary>
-        /// Generate a maze with the Depth-First Search approach
-        /// </summary>
-        /// <param name="mazeArray">the array of cells</param>
-        Result DepthFirstSearchMazeGeneration(Cell[,] mazeArray);
+        Result<Maze> Solve(Maze maze);
 
     }
 }

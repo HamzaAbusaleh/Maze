@@ -13,10 +13,10 @@ namespace WebMaze.Tests
         public void Maze_CheckMazeInitilizedSuccessfully()
         {
             //Act
-            var maze = new Maze(10, 10, new MazeSolver());
+         /*   var maze = new Maze(10, 10, new MazeSolver(), new MazeActions());
 
-            Assert.Equal(maze.GetHeight(), 10);
-            Assert.Equal(maze.GetWidth(), 10);
+            Assert.Equal(maze.Height, 10);
+            Assert.Equal(maze.Width, 10);*/
 
         }
 
@@ -24,10 +24,10 @@ namespace WebMaze.Tests
         public void Generate_CheckIsRunningSetToFalseAftterGenerateFinish()
         {
             // Arrange
-            var maze = new Maze(10, 10, new MazeSolver());
+            var maze = new Maze(new MazeSolver(),new MazeActions(), new MazeGenerator(new MazeActions()));
 
             // Act
-            maze.Generate();
+            maze.Generate(10,10);
 
             // Assert
             Assert.False(maze.IsRunning);
@@ -37,28 +37,28 @@ namespace WebMaze.Tests
         public void Generate_CheckBeginPointExist()
         {
             // Arrange
-            var maze = new Maze(10, 10, new MazeSolver());
+            var maze = new Maze(new MazeSolver(), new MazeActions(), new MazeGenerator(new MazeActions()));
 
             // Act
-            maze.Generate();
+            maze.Generate(10,10);
 
             // Assert
-            Assert.Equal(maze.GetStartPoint().ColIndex, 0);
-            Assert.InRange(maze.GetStartPoint().RowIndex, 0, 9);
+            Assert.Equal(maze.StartPoint.ColIndex, 0);
+            Assert.InRange(maze.StartPoint.RowIndex, 0, 9);
         }
 
         [Fact]
         public void Generate_CheckEndPointExist()
         {
             // Arrange
-            var maze = new Maze(10, 10, new MazeSolver());
+            var maze = new Maze(new MazeSolver(), new MazeActions(), new MazeGenerator(new MazeActions()));
 
             // Act
-            maze.Generate();
+            maze.Generate(10,10);
 
             // Assert
-            Assert.Equal(maze.GetEndPoint().ColIndex, 9);
-            Assert.InRange(maze.GetEndPoint().RowIndex, 0, 9);
+            Assert.Equal(maze.EndPoint.ColIndex, 9);
+            Assert.InRange(maze.EndPoint.RowIndex, 0, 9);
         }
         
     }

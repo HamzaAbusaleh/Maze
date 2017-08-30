@@ -124,29 +124,7 @@ namespace WebMaze.Models.Implementation
                 }
             }
         }
-
-        public string[,] DisplayCell()
-        {
-
-            var x = new string[3, 3];
-            for (int r = 0; r < 3; r++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    x[r, k] = " ";
-
-                }
-            }
-
-            x[1, 1] = "  ";
-            if (UpWall) x[0, 1] = "---";
-            if (LeftWall) x[1, 0] = "|";
-            if (RightWall) x[1, 2] = "|";
-            if (DownWall) x[2, 1] = "---";
-
-            return x;
-
-        }
+        
         /// <summary>
         /// Reset a cell so that all walls are intact and not visited
         /// </summary>

@@ -53,7 +53,7 @@ namespace WebMaze.Models.Implementation
                 }
 
                 // Right
-                if (temp.ColIndex + 1 < maze.GetWidth()
+                if (temp.ColIndex + 1 < maze.Width
                     && !mazeArray[temp.RowIndex, temp.ColIndex + 1].LeftWall
                     && !mazeArray[temp.RowIndex, temp.ColIndex + 1].Visited)
                 {
@@ -76,7 +76,7 @@ namespace WebMaze.Models.Implementation
                 }
 
                 // Down
-                if (temp.RowIndex + 1 < maze.GetHeight()
+                if (temp.RowIndex + 1 < maze.Height
                     && !mazeArray[temp.RowIndex + 1, temp.ColIndex].UpWall
                     && !mazeArray[temp.RowIndex + 1, temp.ColIndex].Visited)
                 {

@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebMaze.Models.Implementation;
+using WebMaze.Models.Interface;
 
 namespace WebMaze.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IMaze _maze;
+        private readonly IMazeActions _actions;
+
+        public HomeController(IMaze maze,IMazeSolver mazeSolver,IMazeActions actions)
+        {
+            _maze = maze;
+            _actions = actions;
+        }
         public IActionResult Index()
         {
             return View();
@@ -18,29 +27,29 @@ namespace WebMaze.Controllers
                 return Json(new { ErrorMessage = "Failed to generate the maze" });
             }
 
-            var maze = new Maze(width, height, new MazeSolver());
-            var result = maze.Generate();
+            var result = _maze.Generate(width, height);
             if (!result.IsSuccessfull)
             {
                 return Json(new { ErrorMessage = "Failed to generate the maze" });
             }
 
-            var mazeArray = maze.MapMazeToArray();
+            var maze = result.Data;
+            var mazeArray = _actions.MapMazeToArray(maze);
 
-            var solveResult = maze.Solve();
+            var solveResult = _maze.Solve(maze);
             if (!solveResult.IsSuccessfull)
             {
                 return Json(new { solveResult.ErrorMessage });
             }
 
-            var mazeArraySolve = maze.MapMazeToArray(true);
+            var mazeArraySolve = _actions.MapMazeToArray(maze,true);
 
             return Json(new
             {
                 Maze = mazeArray,
                 Solution = mazeArraySolve,
-                startPoint = maze.GetStartPoint(),
-                endPoint = maze.GetEndPoint()
+                startPoint = maze.StartPoint,
+                endPoint = maze.EndPoint
             });
         }
 
