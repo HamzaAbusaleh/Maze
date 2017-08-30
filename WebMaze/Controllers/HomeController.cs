@@ -18,18 +18,19 @@ namespace WebMaze.Controllers
                 return Json(new { ErrorMessage = "Failed to generate the maze" });
             }
 
-            var maze = new Maze(width, height);
+            var maze = new Maze(width, height, new MazeSolver());
             var result = maze.Generate();
             if (!result.IsSuccessfull)
             {
                 return Json(new { ErrorMessage = "Failed to generate the maze" });
             }
+
             var mazeArray = maze.MapMazeToArray();
 
             var solveResult = maze.Solve();
             if (!solveResult.IsSuccessfull)
             {
-                return Json(new { ErrorMessage = "Failed to generate the maze solution" });
+                return Json(new { solveResult.ErrorMessage });
             }
 
             var mazeArraySolve = maze.MapMazeToArray(true);

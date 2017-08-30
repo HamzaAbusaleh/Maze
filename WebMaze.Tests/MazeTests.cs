@@ -13,7 +13,7 @@ namespace WebMaze.Tests
         public void Maze_CheckMazeInitilizedSuccessfully()
         {
             //Act
-            var maze = new Maze(10, 10);
+            var maze = new Maze(10, 10, new MazeSolver());
 
             Assert.Equal(maze.GetHeight(), 10);
             Assert.Equal(maze.GetWidth(), 10);
@@ -24,7 +24,7 @@ namespace WebMaze.Tests
         public void Generate_CheckIsRunningSetToFalseAftterGenerateFinish()
         {
             // Arrange
-            var maze = new Maze(10, 10);
+            var maze = new Maze(10, 10, new MazeSolver());
 
             // Act
             maze.Generate();
@@ -37,7 +37,7 @@ namespace WebMaze.Tests
         public void Generate_CheckBeginPointExist()
         {
             // Arrange
-            var maze = new Maze(10, 10);
+            var maze = new Maze(10, 10, new MazeSolver());
 
             // Act
             maze.Generate();
@@ -51,7 +51,7 @@ namespace WebMaze.Tests
         public void Generate_CheckEndPointExist()
         {
             // Arrange
-            var maze = new Maze(10, 10);
+            var maze = new Maze(10, 10, new MazeSolver());
 
             // Act
             maze.Generate();
