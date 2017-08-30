@@ -13,6 +13,11 @@ namespace WebMaze.Models.Interface
         /// </summary>
         Result<Maze> Generate(int width,int height);
 
+        /// <summary>
+        /// Solve the maze
+        /// </summary>
+        /// <param name="maze">The maze</param>
+        /// <returns>Return the result with the Maze object</returns>
         Result<Maze> Solve(Maze maze);
 
     }
