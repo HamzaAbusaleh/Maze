@@ -15,20 +15,17 @@ namespace WebMaze.Models.Implementation
         /// <param name="start">Maze start cell</param>
         /// <param name="end">Maze end cell</param>
         /// <returns>return result that contain the state of the process with the path if exists</returns>
-        public Result<List<Cell>> SolveWithIterativeDepthFirst(Maze maze, Cell start, Cell end)
+        public Result<List<Cell>> SolveWithIterativeDepthFirst(Maze maze)
         {
 
             Stack<Cell> stack = new Stack<Cell>();
             var pathSolution = new List<Cell>();
             var mazeArray = maze.MazeArray;
-            stack.Push(start);
-
-
-
+            stack.Push(maze.StartPoint);
+            
             while (stack.Count > 0)
             {
                 Cell temp = stack.Pop();
-
                 // mark as visited to prevent infinite loops
                 mazeArray[temp.RowIndex, temp.ColIndex].Visited = true;
 
@@ -87,7 +84,7 @@ namespace WebMaze.Models.Implementation
                 }
 
                 // Adding the end and start point as part of the solution
-                if (temp.ColIndex == end.ColIndex && temp.RowIndex == end.RowIndex)
+                if (temp.ColIndex == maze.EndPoint.ColIndex && temp.RowIndex == maze.EndPoint.RowIndex)
                 {
                     // add end point to foundPath
                     temp.IsSolution = true;

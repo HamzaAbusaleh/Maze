@@ -15,6 +15,6 @@ namespace WebMaze.Models.Interface
         /// <param name="start">Maze start cell</param>
         /// <param name="end">Maze end cell</param>
         /// <returns>return result that contain the state of the process with the path if exists</returns>
-        Result<List<Cell>> SolveWithIterativeDepthFirst(Maze maze,Cell start, Cell end);
+        Result<List<Cell>> SolveWithIterativeDepthFirst(Maze maze);
     }
 }

@@ -14,7 +14,6 @@ namespace WebMaze.Models.Implementation
         // The maze solver is used to solve the maze
         private readonly IMazeSolver _mazeSolver;
 
-        private readonly IMazeActions _mazeActions;
         private readonly IMazeGenerator _mazeGenerator;
 
         // Properties 
@@ -65,13 +64,9 @@ namespace WebMaze.Models.Implementation
         /// <summary>
         /// Initializes a maze with a maximum size
         /// </summary>
-        /// <param name="mazeSolver">The maze solver is used to solve the maze</param>
-        /// <param name="mazeActions"></param>
-        /// <param name="mazeGenerator"></param>
-        public Maze(IMazeSolver mazeSolver, IMazeActions mazeActions, IMazeGenerator mazeGenerator)
+        public Maze(IMazeSolver mazeSolver, IMazeGenerator mazeGenerator)
         {
             _mazeSolver = mazeSolver;
-            _mazeActions = mazeActions;
             _mazeGenerator = mazeGenerator;
         }
 
@@ -89,7 +84,6 @@ namespace WebMaze.Models.Implementation
             this._mazeArray = result.Data;
             if (!result.IsSuccessfull)
             {
-
                 return new Result<Maze>() { ErrorMessage = result.ErrorMessage };
             }
 
@@ -107,9 +101,9 @@ namespace WebMaze.Models.Implementation
             // initialize
             IsSolving = true;
             _pathSolution = new List<Cell>();
-            UnVisitAllCells(_mazeArray);
-
-            var result = _mazeSolver.SolveWithIterativeDepthFirst(maze, _startPoint, _endPoint);
+            UnVisitAllCells(maze.MazeArray);
+            
+            var result = _mazeSolver.SolveWithIterativeDepthFirst(maze);
 
             if (!result.IsSuccessfull)
             {
@@ -148,9 +142,9 @@ namespace WebMaze.Models.Implementation
         /// <param name="mazeArray">The maze array to reset elements</param>
         private void UnVisitAllCells(Cell[,] mazeArray)
         {
-            for (int i = 0; i < _mazeArray.GetLength(0); i++)
+            for (int i = 0; i < mazeArray.GetLength(0); i++)
             {
-                for (int j = 0; j < _mazeArray.GetLength(1); j++)
+                for (int j = 0; j < mazeArray.GetLength(1); j++)
                 {
                     mazeArray[i, j].Visited = false;
                     mazeArray[i, j].Path = Cell.Paths.None;
